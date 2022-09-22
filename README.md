@@ -27,7 +27,7 @@ Create a React App without 'create-react-app'
   }
 ```
 
-## 4. instalación de Webpack
+## 4. Instalación de Webpack
 - Es una herramienta que nos puede ayudar a compilar todos nuestros archivos de JavaScript en un sólo archivo o paquete que podemos usar en producción.
 - Utilizamos el comando `npm install webpack webpack-cli html-webpack-plugin html-loader --save-dev`
 - Vamos a crear un archivo `webpack.config.js` que será para nuestra configuración de Webpack en el proyecto:
@@ -137,3 +137,43 @@ Create a React App without 'create-react-app'
 
 ## 8. Inicializamos nuestra aplicación:
 - Con el comando `npm run start`
+
+
+## 9. Resolcuión de importaciones de CSS
+- Al inicio podría marcarnos un problema el hacer importaciones de CSS.
+- Corremos el sigueinte comando `npm install style-loader css-loader --save-dev`.
+- Luego instalar las dependencias para acceder a los CSS con el comando `npm install mini-css-extract-plugin --save-dev`.
+- Luego importar el complemento al inicio de `webpack.config.js` escribiendo `const MiniCssExtractPlugin = require("mini-css-extract-plugin");`.
+- Lo siguiente es habilitar el complemento en la sección de `plugins` de su archivo webpack.config.js
+```
+  plugins: [
+    new MiniCssExtractPlugin(),
+  ],
+```
+- Ahora, habilitamos la carga tanto de archivos en CSS como de módulos en CSS
+```
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          "style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1,
+              modules: true,
+            },
+          },
+        ],
+        include: /\.module\.css$/,
+      },
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"],
+        exclude: /\.module\.css$/,
+      },
+    ]
+  }
+```
+- Y ya con esto tenemos habilitado el uso de múdulos y archivos de CSS en nuestra aplicación.
